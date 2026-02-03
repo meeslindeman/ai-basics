@@ -21,7 +21,7 @@ test_dataset = torchvision.datasets.MNIST(
     transform=transform
 )
 
-def get_data_loaders(batch_size=64):
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+def get_mnist_loaders(batch_size=64, num_workers=2):
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     return train_loader, test_loader
