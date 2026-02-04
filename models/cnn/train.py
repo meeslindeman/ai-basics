@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 import argparse
 
-from core.utils import seed_everything, get_device, get_dataset_info, flatten_dim, make_loss_fn
+from core.utils import seed_everything, get_device, get_dataset_info, make_loss_fn
 from core.loop import train_one_epoch, evaluate, log_epoch
 from datasets import get_loaders
-from models.basic.model import LinearClassifer, MLPClassifier, ResMLP
+from models.cnn.model import CNNClassifier, SmallResNet
 
 def main(args):
     seed_everything(args.seed)
@@ -14,14 +14,11 @@ def main(args):
     train_loader, test_loader = get_loaders(args.dataset, batch_size=args.batch_size)
 
     input_shape, num_classes = get_dataset_info(train_loader)
-    input_size = flatten_dim(input_shape)
 
-    if args.model == 'linear':
-        model = LinearClassifer(input_size=input_size, num_classes=num_classes).to(device)
-    elif args.model == 'mlp':
-        model = MLPClassifier(input_size=input_size, num_classes=num_classes, hidden_size=args.hidden_size, dropout=args.dropout).to(device)
-    elif args.model == 'resmlp':
-        model = ResMLP(input_size=input_size, num_classes=num_classes, hidden_size=args.hidden_size, dropout=args.dropout).to(device)
+    if args.model == 'cnn':
+        model = CNNClassifier(input_shape=input_shape, base_channels=args.base_channels, num_classes=num_classes).to(device)
+    elif args.model == 'resnet':
+        model = SmallResNet(input_shape=input_shape, num_classes=num_classes, dropout=args.dropout).to(device)
     else:
         raise ValueError(f"Unknown model type: {args.model}")
 
@@ -36,11 +33,12 @@ def main(args):
         
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train a basic model on MNIST')
-    parser.add_argument('--model', type=str, default='mlp', choices=['linear', 'mlp', 'resmlp'], help='Type of model to use')
+    parser.add_argument('--model', type=str, default='cnn', choices=['cnn', 'resnet'], help='Type of model to use')
     parser.add_argument('--dataset', type=str, default='mnist', choices=['mnist', 'cifar10'], help='Dataset to use')
     parser.add_argument('--batch-size', type=int, default=64, help='Input batch size for training')
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs to train')
-    parser.add_argument('--hidden-size', type=int, default=128, help='Hidden layer size for MLP/ResMLP')
+    parser.add_argument('--hidden-size', type=int, default=128, help='Hidden layer size for CNN/ResNet')
+    parser.add_argument('--base-channels', type=int, default=32, help='Base number of channels for CNN')
     parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--wd', type=float, default=0.0, help='Weight decay')

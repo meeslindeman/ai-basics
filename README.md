@@ -1,4 +1,6 @@
-Hello
+# Collection of AI basics
+
+In this repo I store a collection of simple AI models. This is for my own reference and learning.
 
 ## Setup
 
@@ -10,7 +12,7 @@ conda activate pytorch-base
 
 > [!TIP]
 >
-> For macOS users run the following comand to avoid warnings with `torch vision`:
+> For macOS users run the following comand to avoid warnings with `torchvision`:
 
 ```bash
 conda install -c conda-forge jpeg libpng
