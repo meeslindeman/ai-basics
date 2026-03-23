@@ -13,6 +13,7 @@ class Shakespeare():
         self.char_to_idx = {char: idx for idx, char in enumerate(self.chars)}
         self.idx_to_char = {idx: char for idx, char in enumerate(self.chars)}
         self.sequence_length = sequence_length
+        self.vocab_size = len(self.chars)
 
         self.char_indices = torch.tensor([self.char_to_idx[c] for c in self.text], dtype=torch.long)
     
@@ -29,7 +30,6 @@ class Shakespeare():
         train_data = torch.utils.data.Subset(self, range(split_idx))
         test_data = torch.utils.data.Subset(self, range(split_idx, len(self)))
         return train_data, test_data
-    
 
 def get_shakespeare_loaders(batch_size=64, num_workers=2, sequence_length=100, split_ratio=0.9):
     dataset = Shakespeare(sequence_length=sequence_length)

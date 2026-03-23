@@ -7,6 +7,7 @@ from core.loop import train_one_epoch, evaluate, log_epoch
 from datasets import get_loaders
 from models.basic.model import LinearClassifer, MLPClassifier, ResMLP
 
+
 def main(args):
     seed_everything(args.seed)
     device = get_device()

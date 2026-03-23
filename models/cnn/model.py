@@ -4,6 +4,9 @@ import torch.nn.functional as F
 
 
 class CNNClassifier(nn.Module):
+    """
+    A simple CNN-based classifier for image classification tasks.
+    """
     def __init__(self, in_channels, out_channels, num_classes):
         super().__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1)
@@ -27,6 +30,9 @@ class CNNClassifier(nn.Module):
     
 
 class ResidualBlock(nn.Module):
+    """
+    A simple residual block for building a small ResNet architecture.
+    """
     def __init__(self, in_channels, out_channels, stride=1):
         super().__init__()
         self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1)
@@ -50,6 +56,9 @@ class ResidualBlock(nn.Module):
     
 
 class SmallResNet(nn.Module):
+    """
+    A small ResNet architecture for image classification tasks, using residual blocks.
+    """
     def __init__(self, in_channels, num_classes):
         super().__init__()
         self.block1 = ResidualBlock(in_channels, 64)

@@ -3,6 +3,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class LinearClassifer(nn.Module):
+    """
+    A simple linear classifier that flattens the input and applies a single linear layer to produce class scores.
+    """
     def __init__(self, input_size, num_classes):
         super().__init__()
         self.fc = nn.Linear(input_size, num_classes)
@@ -13,6 +16,9 @@ class LinearClassifer(nn.Module):
         return out
     
 class MLPClassifier(nn.Module):
+    """
+    A simple multi-layer perceptron (MLP) classifier with one hidden layer and dropout for regularization.
+    """
     def __init__(self, input_size, num_classes, hidden_size, dropout):
         super().__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
@@ -27,6 +33,9 @@ class MLPClassifier(nn.Module):
         return out
     
 class ResMLP(nn.Module):
+    """
+    A residual multi-layer perceptron (MLP) classifier with one hidden layer and dropout for regularization.
+    """
     def __init__(self, input_size, num_classes, hidden_size, dropout):
         super().__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
