@@ -16,9 +16,9 @@ def main(args):
     input_shape, num_classes = get_dataset_info(train_loader)
 
     if args.model == 'cnn':
-        model = CNNClassifier(input_shape=input_shape, base_channels=args.base_channels, num_classes=num_classes).to(device)
+        model = CNNClassifier(in_channels=input_shape[0], out_channels=args.out_channels, num_classes=num_classes).to(device)
     elif args.model == 'resnet':
-        model = SmallResNet(input_shape=input_shape, num_classes=num_classes, dropout=args.dropout).to(device)
+        model = SmallResNet(in_channels=input_shape[0], num_classes=num_classes).to(device)
     else:
         raise ValueError(f"Unknown model type: {args.model}")
 
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     parser.add_argument('--batch-size', type=int, default=64, help='Input batch size for training')
     parser.add_argument('--epochs', type=int, default=10, help='Number of epochs to train')
     parser.add_argument('--hidden-size', type=int, default=128, help='Hidden layer size for CNN/ResNet')
-    parser.add_argument('--base-channels', type=int, default=32, help='Base number of channels for CNN')
+    parser.add_argument('--out_channels', type=int, default=32, help='Base number of channels for CNN')
     parser.add_argument('--lr', type=float, default=0.001, help='Learning rate')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--wd', type=float, default=0.0, help='Weight decay')

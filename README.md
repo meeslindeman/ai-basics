@@ -23,6 +23,8 @@ conda install -c conda-forge jpeg libpng
 The `basic` folder containes simple networks. To run, for instance, a classic MLP on MNIST:
 
 ```
+export PYTHONPATH="$PWD:$PYTHONPATH"
 python -m models.basic.train --model mlp --dataset mnist
 ```
 
+wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt -O data/tinyshakespeare.txt
