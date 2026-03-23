@@ -9,17 +9,15 @@ from models.rnn.model import CharRNN
 
 def train_one_epoch(model, dataloader, optimizer, loss_fn, device):
     model.train()
-    hidden = None
     total_loss = 0.0
     correct = 0
     total = 0
 
     for _, (data, target) in enumerate(dataloader):
+        hidden = None
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output, hidden = model(data, hidden)
-        if hidden is not None:
-            hidden = hidden.detach()  
         loss = loss_fn(output.view(-1, output.size(-1)), target.view(-1))
         pred = output.argmax(dim=-1)
         correct += (pred == target).sum().item()
@@ -35,17 +33,15 @@ def train_one_epoch(model, dataloader, optimizer, loss_fn, device):
 
 def evaluate(model, dataloader, loss_fn, device):
     model.eval()
-    hidden = None
     eval_loss = 0
     correct = 0
     total = 0
 
     with torch.no_grad():
         for data, target in dataloader:
+            hidden = None
             data, target = data.to(device), target.to(device)
             output, hidden = model(data, hidden)
-            if hidden is not None:
-                hidden = hidden.detach()  
             eval_loss += loss_fn(output.view(-1, output.size(-1)), target.view(-1)).item()
             pred = output.argmax(dim=-1)
             correct += (pred == target).sum().item()
@@ -65,20 +61,19 @@ def main(args):
 
     vocab_size = train_loader.dataset.dataset.vocab_size  
 
-    if args.model == 'rnn':
-        model = CharRNN(
-            vocab_size=vocab_size,
-            embedding_dim=args.embedding_dim,
-            hidden_dim=args.hidden_dim,
-            num_layers=args.num_layers,
-            dropout=args.dropout
-        ).to(device)
-    else:
-        raise ValueError(f"Unknown model type: {args.model}")
+    model = CharRNN(
+        vocab_size=vocab_size,
+        embedding_dim=args.embedding_dim,
+        hidden_dim=args.hidden_dim,
+        type=args.model,
+        num_layers=args.num_layers,
+        dropout=args.dropout
+    ).to(device)
 
     loss_fn = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.wd)
 
+    print(f"Training {args.model.upper()} on {args.dataset} for {args.epochs} epochs...")
     for epoch in range(1, args.epochs + 1):
         train_dict = train_one_epoch(model, train_loader, optimizer, loss_fn, device)
         eval_dict = evaluate(model, test_loader, loss_fn, device)

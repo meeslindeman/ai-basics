@@ -27,4 +27,5 @@ export PYTHONPATH="$PWD:$PYTHONPATH"
 python -m models.basic.train --model mlp --dataset mnist
 ```
 
+mkdir data/
 wget https://raw.githubusercontent.com/karpathy/char-rnn/master/data/tinyshakespeare/input.txt -O data/tinyshakespeare.txt

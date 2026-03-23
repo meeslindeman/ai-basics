@@ -45,3 +45,6 @@ data/
 *.tsv
 *.npz
 *.npy
+
+# --- Misc ---
+*.job
